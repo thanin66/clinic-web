@@ -8,7 +8,7 @@
         {{ errorMessage }}
       </v-alert>
 
-      <!-- Action Buttons -->
+      <!-- Buttons -->
       <div class="d-flex justify-center gap-3 flex-wrap mb-4">
         <v-btn color="primary" @click="showModal = true">เพิ่มตารางนัด</v-btn>
         <v-btn color="secondary" @click="viewProfile">Profile</v-btn>
@@ -113,7 +113,7 @@
         </v-card>
       </v-dialog>
 
-      <!-- Edit Appointment Modal -->
+      <!-- Edit Appointment -->
       <v-dialog v-model="editModal" max-width="400">
         <v-card>
           <v-card-title class="text-h6">แก้ไขการนัดหมาย</v-card-title>
@@ -150,7 +150,7 @@
         </v-card>
       </v-dialog>
 
-      <!-- Delete Confirmation Dialog -->
+      <!-- Delete Confirmation -->
       <v-dialog v-model="deleteDialog" max-width="400">
         <v-card>
           <v-card-title class="text-h6">ยืนยันการลบ</v-card-title>
@@ -281,7 +281,11 @@ export default {
         this.fetchAppointments()
       } catch (err) {
         console.error(err)
-        this.errorMessage = 'สร้างการนัดหมายไม่สำเร็จ'
+        if (err.response && err.response.data && err.response.data.detail) {
+          this.errorMessage = err.response.data.detail
+        } else {
+          this.errorMessage = 'สร้างการนัดหมายไม่สำเร็จ'
+        }
       } finally { this.loading = false }
     },
     editAppointment(appt) {
@@ -335,7 +339,6 @@ export default {
       }
     },
 
-    // Navigation
     viewProfile() {
       this.$router.push('/profile')
     },

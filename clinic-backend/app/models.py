@@ -22,12 +22,13 @@ class User(Base):
     chronic_conditions = Column(String, nullable=True)
     current_medications = Column(String, nullable=True)
 
-    appointments = relationship("Appointment", back_populates="user")
+    appointments = relationship("Appointment", cascade="all, delete-orphan", back_populates="user")
+
 
 class Appointment(Base):
     __tablename__ = "appointments"
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
     doctor_name = Column(String)
     appointment_date = Column(Date)
     appointment_time = Column(Time)

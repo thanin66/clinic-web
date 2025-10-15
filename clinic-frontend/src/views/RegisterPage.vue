@@ -3,7 +3,7 @@
     <v-card width="400" class="pa-6">
       <h2 class="text-center mb-4">สมัครสมาชิก</h2>
 
-      <!-- แสดงข้อความ error -->
+      <!--error -->
       <v-alert
         v-if="errorMessage"
         type="error"
@@ -87,7 +87,6 @@ export default {
       this.errorMessage = "";
       const form = this.$refs.form;
 
-      // ตรวจสอบ validation ก่อน
       const valid = await form.validate();
       if (!valid) return;
 
@@ -107,14 +106,11 @@ export default {
 
         this.loading = false;
 
-        // ✅ แสดงเฉพาะข้อความเข้าใจง่าย
         const backendMsg =
           err?.detail ||
           err?.response?.data?.detail ||
           err?.message ||
           "เกิดข้อผิดพลาดระหว่างสมัครสมาชิก";
-
-        // ✅ กรองไม่ให้แสดงข้อความ JSON ยาว ๆ ของ FastAPI validation
         if (typeof backendMsg === "string" && backendMsg.includes("value_error")) {
           this.errorMessage = "กรุณากรอกข้อมูลให้ถูกต้อง";
         } else {

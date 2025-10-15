@@ -23,17 +23,17 @@ oauth.register(
     client_kwargs={'scope': 'openid email profile'},
 )
 
-# 1. Endpoint สำหรับเริ่มต้น Login
+# Endpoint สำหรับเริ่มต้น Login
 @router.get('/google/login')
 async def login_via_google(request: Request):
     redirect_uri = request.url_for('auth_google_callback')
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
-# 2. Endpoint สำหรับรับ Callback จาก Google
+#Endpoint สำหรับรับ Callback จาก Google
 @router.get('/google/callback', name='auth_google_callback')
 async def auth_google_callback(request: Request, db: Session = Depends(get_db)):
     try:
-        # 1. แลก Code เป็น Access Token และ User Info
+        #แลก Code เป็น Access Token และ User Info
         token = await oauth.google.authorize_access_token(request)
         user_info = token.get('userinfo')
         
@@ -43,7 +43,7 @@ async def auth_google_callback(request: Request, db: Session = Depends(get_db)):
 
         email = user_info['email']
 
-        # 2. ค้นหาผู้ใช้ในฐานข้อมูล (ใช้ฟังก์ชันที่คุณมีใน crud.py)
+        #ค้นหาผู้ใช้ในฐานข้อมูล (ใช้ฟังก์ชันที่คุณมีใน crud.py)
         user = crud.get_user_by_email(db, email)
 
         if not user:
@@ -57,14 +57,14 @@ async def auth_google_callback(request: Request, db: Session = Depends(get_db)):
             )
             user = crud.create_google_user(db, google_user_data) # สร้างผู้ใช้ใน DB
         
-        # 3. สร้าง JWT Token สำหรับผู้ใช้ที่ล็อกอิน (ไม่ว่าจะเป็นผู้ใช้เดิมหรือใหม่)
+        #สร้าง JWT Token สำหรับผู้ใช้ที่ล็อกอิน
         # ตรวจสอบว่า 'user' มีค่าหรือไม่ ก่อนจะเรียก user.id
         if not user:
             raise Exception("Failed to create or retrieve user from database.")
             
         access_token = auth.create_access_token({"sub": str(user.id), "auth_method": "google"})
         
-        # 4. Redirect กลับไปที่ Frontend (ถ้าสำเร็จ)
+        #Redirect กลับไปที่ Frontend (ถ้าสำเร็จ)
         frontend_redirect_url = os.getenv("FRONTEND_URL", "http://localhost:8080")
         response = RedirectResponse(
             # ส่ง token กลับไปให้ Vue.js จัดการ
@@ -74,13 +74,11 @@ async def auth_google_callback(request: Request, db: Session = Depends(get_db)):
         return response
 
     except Exception as e:
-        # **จัดการ Error และแสดงรายละเอียด**
-        print(f"==================================================")
+        #จัดการ Error และแสดงรายละเอียด
         print(f"GOOGLE AUTH FAILURE: {e}")
-        print(f"==================================================")
         
         # ตรวจสอบประเภท Error ที่อาจเกิดจาก Authlib 
-        # (เช่น Invalid token, code already used, invalid credentials)
+        # (Invalid token, code already used, invalid credentials)
         error_str = str(e).lower()
         if "access_token_not_found" in error_str:
             detail_msg = "OAuth Error: Authorization code not found or expired."

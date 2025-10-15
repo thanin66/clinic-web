@@ -73,7 +73,7 @@ def read_appointment(
 ):
     appointment = db.get(models.Appointment, appointment_id)
     if not appointment:
-        raise HTTPException(status_code=404, detail="Appointment not found")
+        raise HTTPException(status_code=404, detail="ไม่พบการนัดหมาย")
     return appointment
 
 # ---------------- UPDATE ----------------
@@ -86,7 +86,7 @@ def update_appointment(
 ):
     appointment = db.get(models.Appointment, appointment_id)
     if not appointment or appointment.user_id != current_user.id:
-        raise HTTPException(status_code=404, detail="Appointment not found")
+        raise HTTPException(status_code=404, detail="ไม่พบการนัดหมาย")
 
     # อัปเดตวัน/slot
     if appointment_update.appointment_date or appointment_update.time_slot:
@@ -136,7 +136,7 @@ def delete_appointment(
 ):
     appointment = db.get(models.Appointment, appointment_id)
     if not appointment or appointment.user_id != current_user.id:
-        raise HTTPException(status_code=404, detail="Appointment not found")
+        raise HTTPException(status_code=404, detail="ไม่พบการนัดหมาย")
     db.delete(appointment)
     db.commit()
-    return {"detail": "Appointment deleted"}
+    return {"detail": "ลบการนัดหมายเรียบร้อยแล้ว"}

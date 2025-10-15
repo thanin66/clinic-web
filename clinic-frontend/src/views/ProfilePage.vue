@@ -3,12 +3,12 @@
     <v-card max-width="900" class="mx-auto pa-6">
       <h2 class="text-center mb-6">User Profile</h2>
 
-      <!-- Alert -->
+      <!-- alert -->
       <v-alert v-if="errorMessage" type="error" density="compact" border="start" variant="tonal" class="mb-4">
         {{ errorMessage }}
       </v-alert>
 
-      <!-- Display Mode -->
+      <!-- display-->
       <div v-if="!isEditing">
         <v-row dense>
           <v-col cols="12" md="4">
@@ -41,7 +41,7 @@
         </v-row>
       </div>
 
-      <!-- Edit Mode -->
+      <!-- edit -->
       <v-form v-else ref="form" v-model="isValid" lazy-validation>
         <v-row dense>
           <v-col cols="12" md="4">
@@ -77,14 +77,14 @@
         </div>
       </v-form>
 
-      <!-- Action Buttons -->
+      <!-- action Buttons -->
       <div class="d-flex justify-center gap-3 mt-6 flex-wrap">
         <v-btn v-if="!isEditing" color="primary" @click="isEditing = true">แก้ไขข้อมูล</v-btn>
         <v-btn color="error" @click="confirmDelete = true">ลบผู้ใช้</v-btn>
         <v-btn color="secondary" @click="goDashboard">กลับ appointments</v-btn>
       </div>
 
-      <!-- Delete Confirmation Dialog -->
+      <!-- delete Confirmation Dialog -->
       <v-dialog v-model="confirmDelete" max-width="400">
         <v-card>
           <v-card-title class="text-h6">ยืนยันการลบ</v-card-title>
@@ -159,7 +159,6 @@ export default {
     try {
       const payload = { ...this.editedUser }
 
-      // ✅ ถ้า date_of_birth เป็น string ว่าง ให้ลบออก
       if (!payload.date_of_birth) {
         delete payload.date_of_birth
       } else {

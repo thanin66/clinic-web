@@ -9,20 +9,20 @@
 export default {
   name: 'GoogleCallbackPage',
   mounted() {
-    // 1. ดึง Query Parameter ที่ชื่อ 'token'
+    // ดึง Query Parameter ที่ชื่อ 'token'
     const token = this.$route.query.token;
     const error = this.$route.query.error;
 
     if (token) {
-      // 2. ถ้ามี token ให้บันทึกและไปหน้า Dashboard
+      // ถ้ามี token ให้บันทึกและไปหน้า appointments
       localStorage.setItem("token", token);
       this.$router.push("/appointments");
     } else if (error) {
-      // 3. ถ้ามี error
+      //มี error
       alert("การล็อกอินด้วย Google ล้มเหลว โปรดลองอีกครั้ง");
       this.$router.push("/login");
     } else {
-      // 4. กรณีที่ไม่ปกติ
+      //เหตุไม่ปกติ
       alert("เกิดข้อผิดพลาดในการล็อกอิน");
       this.$router.push("/login");
     }

@@ -121,12 +121,11 @@ export default {
     }
   },
 
-    // ฟังก์ชันใหม่: Google Login
+    // Google Login
     loginWithGoogle() {
-      // ใช้ window.location.href เพื่อ Redirect ไปที่ Backend โดยตรง
+      // Redirect ไปที่ backend
       const googleLoginUrl = `${api.defaults.baseURL}/auth/google/login`;
       window.location.href = googleLoginUrl;
-      // ไม่ต้องกำหนด loading เพราะ Browser จะเปลี่ยนหน้าทันที
     }
   },
 };
