@@ -104,7 +104,7 @@ export default {
 
       if(res.data && res.data.access_token) {
         localStorage.setItem("token", res.data.access_token);
-        this.$router.push("/dashboard");
+        this.$router.push("/appointments");
       } else {
         this.errorMessage = "ไม่สามารถเข้าสู่ระบบได้ โปรดลองอีกครั้ง";
       }
